@@ -57,7 +57,10 @@ exports.marcarDevuelto = async (req, res) => {
 
   try {
     const prestamo = await Prestamo.findByPk(id, {
-      include: [Libro]
+      include: [{
+        model: Libro,
+        as: 'libro'
+      }]
     });
 
     if (!prestamo) {
@@ -85,7 +88,7 @@ exports.marcarDevuelto = async (req, res) => {
     });
   } catch (err) {
     res.status(500).send({
-      message: "Error al marcar el libro como devuelto."
+      message: "Error al marcar el libro como devuelto: " + err.message
     });
   }
 };
@@ -95,7 +98,12 @@ exports.findPrestamosByEstudiante = (req, res) => {
 
   Prestamo.findAll({
     where: { estudianteId: estudianteId },
-    include: [Libro]
+    include: [{
+      model: Libro,
+      as: 'libro',
+      attributes: ['id', 'titulo', 'autor']
+    }],
+    order: [['fechaPrestamo', 'DESC']]
   })
     .then(data => {
       res.send(data);
@@ -111,11 +119,13 @@ exports.findAll = (req, res) => {
   Prestamo.findAll({
     include: [
       {
-        model: db.libros,
+        model: Libro,
+        as: 'libro',
         attributes: ['id', 'titulo', 'autor']
       },
       {
-        model: db.estudiantes,
+        model: Estudiante,
+        as: 'estudiante',
         attributes: ['id', 'nombre', 'carnet']
       }
     ],
