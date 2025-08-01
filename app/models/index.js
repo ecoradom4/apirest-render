@@ -45,7 +45,7 @@ db.estudiantes.belongsToMany(db.libros, {
 // Relaciones uno a muchos 
 db.prestamos.belongsTo(db.libros, {
   foreignKey: "libroId",
-  as: "libro"  
+  as: "libro"
 });
 
 db.prestamos.belongsTo(db.estudiantes, {

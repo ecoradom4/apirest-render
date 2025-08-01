@@ -96,7 +96,7 @@ exports.marcarDevuelto = async (req, res) => {
 exports.findPrestamosByEstudiante = (req, res) => {
   const estudianteId = req.params.id;
 
-  Prestamo.findAll({
+  db.prestamos.findAll({
     where: { estudianteId: estudianteId },
     include: [
       {
@@ -118,7 +118,7 @@ exports.findPrestamosByEstudiante = (req, res) => {
   .catch(err => {
     console.error("Error detallado:", err);
     res.status(500).send({
-      message: err.message || "Error al recuperar los préstamos del estudiante."
+      message: "Error al recuperar préstamos: " + err.message
     });
   });
 };
