@@ -21,11 +21,11 @@ module.exports = (sequelize, Sequelize) => {
   Estudiante.belongsToMany(models.libros, {
     through: models.prestamos,
     foreignKey: 'estudianteId',
-    as: 'librosPrestados'
+    as: 'libros'
   });
   Estudiante.hasMany(models.prestamos, {
     foreignKey: 'estudianteId',
-    as: 'historialPrestamos'
+    as: 'prestamos'
   });
 };
 

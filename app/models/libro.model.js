@@ -25,11 +25,11 @@ module.exports = (sequelize, Sequelize) => {
   Libro.belongsToMany(models.estudiantes, {
     through: models.prestamos,
     foreignKey: 'libroId',
-    as: 'prestamosActivos'
+    as: 'estudiantes'
   });
   Libro.hasMany(models.prestamos, {
     foreignKey: 'libroId',
-    as: 'registrosPrestamo'
+    as: 'prestamos'
   });
 };
 

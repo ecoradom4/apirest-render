@@ -93,34 +93,33 @@ exports.marcarDevuelto = async (req, res) => {
   }
 };
 
-exports.findPrestamosByEstudiante = (req, res) => {
-  const estudianteId = req.params.id;
-
-  db.prestamos.findAll({
-    where: { estudianteId: estudianteId },
-    include: [
-      {
-        model: db.libros,
-        as: 'libro', 
-        attributes: ['id', 'titulo', 'autor', 'disponible']
-      },
-      {
-        model: db.estudiantes,
-        as: 'estudiante', 
-        attributes: ['id', 'nombre', 'carnet']
-      }
-    ],
-    order: [['fechaPrestamo', 'DESC']]
-  })
-  .then(data => {
-    res.send(data);
-  })
-  .catch(err => {
-    console.error("Error detallado:", err);
-    res.status(500).send({
-      message: "Error al recuperar préstamos: " + err.message
+exports.findPrestamosByEstudiante = async (req, res) => {
+  try {
+    const prestamos = await db.prestamos.findAll({
+      where: { estudianteId: req.params.id },
+      include: [
+        {
+          model: db.libros,
+          as: 'libro', // Debe coincidir exactamente con el alias en Prestamo.belongsTo
+          attributes: ['id', 'titulo', 'autor', 'disponible']
+        },
+        {
+          model: db.estudiantes,
+          as: 'estudiante', // Debe coincidir exactamente con el alias en Prestamo.belongsTo
+          attributes: ['id', 'nombre', 'carnet']
+        }
+      ],
+      order: [['fechaPrestamo', 'DESC']]
     });
-  });
+
+    res.json(prestamos);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ 
+      message: "Error al obtener préstamos",
+      error: error.message 
+    });
+  }
 };
 
 exports.findAll = (req, res) => {
