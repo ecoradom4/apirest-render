@@ -20,5 +20,18 @@ module.exports = (sequelize, Sequelize) => {
       defaultValue: true
     }
   });
+
+  Libro.associate = function(models) {
+  Libro.belongsToMany(models.estudiantes, {
+    through: models.prestamos,
+    foreignKey: 'libroId',
+    as: 'prestamosActivos'
+  });
+  Libro.hasMany(models.prestamos, {
+    foreignKey: 'libroId',
+    as: 'registrosPrestamo'
+  });
+};
+
   return Libro;
 };

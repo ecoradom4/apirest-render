@@ -9,5 +9,18 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: true
     }
   });
+
+  // Agrega estas asociaciones
+  Prestamo.associate = function(models) {
+    Prestamo.belongsTo(models.libros, {
+      foreignKey: 'libroId',
+      as: 'libro'
+    });
+    Prestamo.belongsTo(models.estudiantes, {
+      foreignKey: 'estudianteId',
+      as: 'estudiante'
+    });
+  };
+
   return Prestamo;
 };

@@ -16,5 +16,18 @@ module.exports = (sequelize, Sequelize) => {
       }
     }
   });
+
+  Estudiante.associate = function(models) {
+  Estudiante.belongsToMany(models.libros, {
+    through: models.prestamos,
+    foreignKey: 'estudianteId',
+    as: 'librosPrestados'
+  });
+  Estudiante.hasMany(models.prestamos, {
+    foreignKey: 'estudianteId',
+    as: 'historialPrestamos'
+  });
+};
+
   return Estudiante;
 };
