@@ -98,21 +98,29 @@ exports.findPrestamosByEstudiante = (req, res) => {
 
   Prestamo.findAll({
     where: { estudianteId: estudianteId },
-    include: [{
-      model: Libro,
-      as: 'libro',
-      attributes: ['id', 'titulo', 'autor']
-    }],
+    include: [
+      {
+        model: db.libros,
+        as: 'libro', 
+        attributes: ['id', 'titulo', 'autor', 'disponible']
+      },
+      {
+        model: db.estudiantes,
+        as: 'estudiante', 
+        attributes: ['id', 'nombre', 'carnet']
+      }
+    ],
     order: [['fechaPrestamo', 'DESC']]
   })
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: err.message || "Error al recuperar los préstamos del estudiante."
-      });
+  .then(data => {
+    res.send(data);
+  })
+  .catch(err => {
+    console.error("Error detallado:", err);
+    res.status(500).send({
+      message: err.message || "Error al recuperar los préstamos del estudiante."
     });
+  });
 };
 
 exports.findAll = (req, res) => {
