@@ -6,6 +6,8 @@ module.exports = app => {
   router.post("/", prestamos.asignarLibro);
   // Marcar libro como devuelto
   router.put("/:id/devolver", prestamos.marcarDevuelto);
+   // Obtener todos los préstamos 
+  router.get("/", prestamos.findAll);
 
   app.use('/api/prestamos', router);
 };

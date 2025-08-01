@@ -106,3 +106,27 @@ exports.findPrestamosByEstudiante = (req, res) => {
       });
     });
 };
+
+exports.findAll = (req, res) => {
+  Prestamo.findAll({
+    include: [
+      {
+        model: db.libros,
+        attributes: ['id', 'titulo', 'autor']
+      },
+      {
+        model: db.estudiantes,
+        attributes: ['id', 'nombre', 'carnet']
+      }
+    ],
+    order: [['fechaPrestamo', 'DESC']]
+  })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: err.message || "Error al recuperar todos los préstamos."
+      });
+    });
+};
