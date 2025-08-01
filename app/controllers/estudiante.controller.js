@@ -112,3 +112,20 @@ exports.delete = (req, res) => {
       });
     });
 };
+
+exports.findPrestamosByEstudiante = (req, res) => {
+  const estudianteId = req.params.id;
+
+  db.prestamos.findAll({
+    where: { estudianteId: estudianteId },
+    include: [db.libros]
+  })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: err.message || "Error al recuperar los préstamos del estudiante."
+      });
+    });
+};
