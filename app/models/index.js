@@ -27,44 +27,6 @@ db.libros = require("./libro.model.js")(sequelize, Sequelize);
 db.estudiantes = require("./estudiante.model.js")(sequelize, Sequelize);
 db.prestamos = require("./prestamo.model.js")(sequelize, Sequelize);
 
-// Definir relaciones
-// Relación muchos-a-muchos entre Libros y Estudiantes a través de Préstamos
-db.libros.belongsToMany(db.estudiantes, {
-  through: db.prestamos,
-  foreignKey: "libroId",
-  otherKey: "estudianteId",
-  as: "prestamosActivos"
-});
-
-db.estudiantes.belongsToMany(db.libros, {
-  through: db.prestamos,
-  foreignKey: "estudianteId",
-  otherKey: "libroId",
-  as: "librosPrestados"
-});
-
-// Relaciones belongsTo para Préstamos
-db.prestamos.belongsTo(db.libros, {
-  foreignKey: "libroId",
-  as: "libro"
-});
-
-db.prestamos.belongsTo(db.estudiantes, {
-  foreignKey: "estudianteId",
-  as: "estudiante"
-});
-
-// Relaciones hasMany para acceder a préstamos desde Libros y Estudiantes
-db.libros.hasMany(db.prestamos, {
-  foreignKey: "libroId",
-  as: "registrosPrestamo"
-});
-
-db.estudiantes.hasMany(db.prestamos, {
-  foreignKey: "estudianteId",
-  as: "historialPrestamos"
-});
-
 // Ejecutar las asociaciones definidas en los modelos
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {

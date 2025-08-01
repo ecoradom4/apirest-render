@@ -124,27 +124,27 @@ exports.findPrestamosByEstudiante = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-  Prestamo.findAll({
+  db.prestamos.findAll({  // Cambiado de Prestamo a db.prestamos
     include: [
       {
-        model: Libro,
+        model: db.libros,  // Cambiado de Libro a db.libros
         as: 'libro',
         attributes: ['id', 'titulo', 'autor']
       },
       {
-        model: Estudiante,
+        model: db.estudiantes,  // Cambiado de Estudiante a db.estudiantes
         as: 'estudiante',
         attributes: ['id', 'nombre', 'carnet']
       }
     ],
     order: [['fechaPrestamo', 'DESC']]
   })
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: err.message || "Error al recuperar todos los préstamos."
-      });
+  .then(data => {
+    res.send(data);
+  })
+  .catch(err => {
+    res.status(500).send({
+      message: err.message || "Error al recuperar todos los préstamos."
     });
+  });
 };
