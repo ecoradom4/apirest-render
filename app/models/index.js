@@ -27,17 +27,40 @@ db.libros = require("./libro.model.js")(sequelize, Sequelize);
 db.estudiantes = require("./estudiante.model.js")(sequelize, Sequelize);
 db.prestamos = require("./prestamo.model.js")(sequelize, Sequelize);
 
-// Definir relaciones
+// Relación muchos a muchos a través de préstamos
 db.libros.belongsToMany(db.estudiantes, {
   through: db.prestamos,
   foreignKey: "libroId",
-  otherKey: "estudianteId"
+  otherKey: "estudianteId",
+  as: "prestamosActivos"  
 });
 
 db.estudiantes.belongsToMany(db.libros, {
   through: db.prestamos,
   foreignKey: "estudianteId",
-  otherKey: "libroId"
+  otherKey: "libroId",
+  as: "librosPrestados"  
+});
+
+// Relaciones uno a muchos 
+db.prestamos.belongsTo(db.libros, {
+  foreignKey: "libroId",
+  as: "libro"  
+});
+
+db.prestamos.belongsTo(db.estudiantes, {
+  foreignKey: "estudianteId",
+  as: "estudiante" 
+});
+
+db.libros.hasMany(db.prestamos, {
+  foreignKey: "libroId",
+  as: "registrosPrestamo"
+});
+
+db.estudiantes.hasMany(db.prestamos, {
+  foreignKey: "estudianteId",
+  as: "historialPrestamos"
 });
 
 module.exports = db;
